@@ -72,9 +72,11 @@ function DocumentEditor({onChange,document}){
         // console.log(start.path,end.path);
     },[selection,editor.selection,onChange])
 
-    return <Slate editor={editor} initialValue={document} onChange={onChangeHandler}>
+    return <Slate editor={editor} initialValue={document} onChange={onChangeHandler} >
         <ToolBar selection={selection} />
-        <Editable  renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={on_key_down} />
+        <div style={{height:"100%",borderWidth:5,borderColor:"black"}}>
+        <Editable  renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={on_key_down} style={{minHeight:"90vh",borderWidth:"20px"}}/>
+        </div>
     </Slate>
 }
 export default DocumentEditor;
