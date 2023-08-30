@@ -29,7 +29,7 @@ function DocumentEditor({onChange,document}){
     //     sharedType.applyDelta(slateNodesToInsertDelta(document));
     //     return sharedType;
     // },[]);
-    console.log(provider.document);
+    console.log(provider.isConnected);
     const editor = useMemo(()=>{
         const sharedType = provider.document.get('content',Y.XmlText) ;
         const e = withReact(withYHistory(withYjs(createEditor(),sharedType)));
@@ -54,6 +54,7 @@ function DocumentEditor({onChange,document}){
     },[provider.document]);
     useEffect(() => {
         provider.connect();
+        console.log(provider.isConnected)
         return () => provider.disconnect();
       }, [provider]);
     useEffect(() => {
