@@ -7,29 +7,34 @@ import ToolBar from "./ToolBar";
 import useSelection from "../hooks/useSelection";
 import { withYjs, slateNodesToInsertDelta, YjsEditor,withYHistory } from '@slate-yjs/core';
 import * as Y from 'yjs';
-import { HocuspocusProvider } from "@hocuspocus/provider";
+import { HocuspocusProvider,HocuspocusProviderWebsocket } from "@hocuspocus/provider";
 //import { Range } from "slate";
 //const initialValue=
 function DocumentEditor({onChange,document}){
     
-    
+    const socket = useMemo(()=>{ return new HocuspocusProviderWebsocket({
+        url:"ws://127.0.0.1:1234/123"
+    })},[]);
+   console.log(socket)
     const provider = useMemo(()=>{
         // const yDoc = new Y.Doc();
         // console.log(yDoc)
         return new HocuspocusProvider({
-            url: 'ws://0.0.0.0:1234',
+            websocketProvider: socket,
+            
             name : 'slate-yjs',
             
             connect : false
         })},[]
     );
+    
     // const sharedType = useMemo(()=>{
     //     const yDoc = new Y.Doc();
     //     const sharedType  = yDoc.get("content",Y.XmlText);
     //     sharedType.applyDelta(slateNodesToInsertDelta(document));
     //     return sharedType;
     // },[]);
-    console.log(provider.isConnected);
+    //console.log(provider.isConnected);
     const editor = useMemo(()=>{
         const sharedType = provider.document.get('content',Y.XmlText) ;
         const e = withReact(withYHistory(withYjs(createEditor(),sharedType)));
@@ -73,7 +78,7 @@ function DocumentEditor({onChange,document}){
     },[selection,editor.selection,onChange])
 
     return <Slate editor={editor} initialValue={document} onChange={onChangeHandler} >
-        <ToolBar selection={selection} />
+        <ToolBar selection={selection} socket={socket}  />
         <div style={{height:"100%",borderWidth:5,borderColor:"black"}}>
         <Editable  renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={on_key_down} style={{minHeight:"90vh",borderWidth:"20px"}}/>
         </div>

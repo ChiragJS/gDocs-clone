@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
-import DocConnection from './component/DocConnection';
+//import DocConnection from './component/DocConnection';
 import DocumentEditor from './component/DocumentEditor';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
@@ -8,7 +8,7 @@ import DocumentEditor from './component/DocumentEditor';
 const exampleDocument = [
   {
       type:'paragraph',
-      children : [{text:'A line of text in paragraph'}]
+      children : [{text:''}]
   },
   // {
   //     type:'h1',
@@ -30,7 +30,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path='/' element={<DocConnection />}/>
+          {/* <Route path='/' element={<DocConnection />}/> */}
           <Route path='/document/:docId' element={<DocumentEditor document={document} onChange={updateDocument} />} />
         </Routes>
       </Router>

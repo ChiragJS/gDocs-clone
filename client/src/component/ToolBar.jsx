@@ -9,6 +9,7 @@ import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import CodeIcon from '@mui/icons-material/Code';
 import { useCallback, useState,useEffect } from "react";
 import { getActiveStyles,getTextBlockStyle,toggleBlockStyle,toggleStyle } from "../utils/EditorUtils";
+import SaveIcon from '@mui/icons-material/Save';
 import { useSlateStatic } from "slate-react";
 const activeStyle={
     backgroundColor: "#eeeeee"
@@ -18,7 +19,7 @@ const notActiveStyle={
 
 }
 
-function ToolBar({selection}){
+function ToolBar({selection,socket}){
     const editor = useSlateStatic();
     const PARAGRAPH = ["h1","h2","h3","h4","paragraph"];
     const ICONS = [{icon : <FormatAlignCenterIcon sx={{marginRight:1,marginLeft:1}} />,type : "alignCenter"},{icon :<FormatAlignLeftIcon sx={{marginRight:1,marginLeft:1}} />,type:'alignLeft'},{icon :<FormatAlignJustifyIcon sx={{marginRight:1,marginLeft:1}} />,type : "alignJustify"},{icon : <FormatAlignRightIcon sx={{marginRight:1,marginLeft:1}} />,type : "alignRight"},{icon : <FormatBoldIcon sx={{marginRight:1,marginLeft:1}} />,type : "bold"},{icon :<FormatItalicIcon sx={{marginRight:1,marginLeft:1}} />, type : "italic"},{icon : <FormatUnderlinedIcon sx={{marginRight:1,marginLeft:1}} />,type :"underline"},{icon : <CodeIcon sx={{marginRight:1,marginLeft:1}} />,type:"code"}];
@@ -37,6 +38,12 @@ function ToolBar({selection}){
         {PARAGRAPH.map((type)=><HighLevelFormatting editor={editor} isActive={getActiveStyles(editor).has(type)} onBlockTypeChange={onBlockTypeChange} blockType={blockType} type={type}/>)
          }
          {ICONS.map((x)=> <LowLevelFormatting editor={editor} isActive={getActiveStyles(editor).has(x.type)} type={x.type} icon={x.icon}/>)}
+         <SaveIcon onMouseOver={(event)=>{event.target.style.backgroundColor="#eeeeee";}} onMouseOut={(event)=>{event.target.style.background = ""}} sx={{marginRight:1,marginLeft:1,padding:1,borderRadius:"3px"}} onClick={()=>{
+            console.log("save button clicked!")
+            socket.send("hi",editor);
+            socket.on("sbc",(payload)=>{console.log("message from server")});
+
+         }} />
     </div>
 }
 
